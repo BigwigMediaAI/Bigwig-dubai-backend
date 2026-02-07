@@ -85,7 +85,7 @@ exports.verifyOTP = async (req, res) => {
 
     // Internal notification
     await sendEmail({
-      to: "hsinghkhalsa980@gmail.com",
+      to: "chandangomia2812@gmail.com",
       subject: "New Lead Captured - Bigwig Media",
       html: `
         <h3>New Lead Details</h3>
@@ -124,25 +124,30 @@ exports.getAllLeads = async (req, res) => {
 =============================== */
 exports.markLead = async (req, res) => {
   const { id } = req.params;
+  const { marked } = req.body;
 
   try {
-    const lead = await Lead.findByIdAndUpdate(
-      id,
-      { marked: true },
-      { new: true },
-    );
+    if (typeof marked !== "boolean") {
+      return res.status(400).json({
+        message: "Marked value must be boolean",
+      });
+    }
+
+    const lead = await Lead.findByIdAndUpdate(id, { marked }, { new: true });
 
     if (!lead) {
       return res.status(404).json({ message: "Lead not found." });
     }
 
     res.status(200).json({
-      message: "Lead marked successfully.",
+      message: "Lead updated successfully.",
       lead,
     });
   } catch (err) {
-    console.error("Error marking lead:", err);
-    res.status(500).json({ message: "Server error while marking lead." });
+    console.error("Error updating lead:", err);
+    res.status(500).json({
+      message: "Server error while updating lead.",
+    });
   }
 };
 

@@ -74,7 +74,7 @@ exports.getPublicTestimonials = async (req, res) => {
   try {
     const testimonials = await Testimonial.find({ isActive: true })
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(8);
 
     return res.status(200).json(testimonials);
   } catch (error) {
