@@ -7,6 +7,7 @@ const {
   getAllLeads,
   markLead,
   deleteLead,
+  getLeadStats,
 } = require("../controllers/lead.controller");
 
 // OTP routes
@@ -17,5 +18,6 @@ router.post("/verify-otp", verifyOTP);
 router.get("/", getAllLeads);
 router.patch("/:id/mark", markLead);
 router.delete("/:id", deleteLead);
+router.get("/stats", getLeadStats);
 
 module.exports = router;

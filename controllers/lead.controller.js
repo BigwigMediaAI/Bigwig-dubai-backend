@@ -170,3 +170,32 @@ exports.deleteLead = async (req, res) => {
     res.status(500).json({ message: "Server error while deleting lead." });
   }
 };
+
+/* ============================
+   LEAD STATS BY DATE
+=============================== */
+exports.getLeadStats = async (req, res) => {
+  try {
+    const stats = await Lead.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    res.status(200).json(stats);
+  } catch (err) {
+    console.error("Error fetching lead stats:", err);
+    res.status(500).json({
+      message: "Server error while fetching lead stats.",
+    });
+  }
+};
